@@ -24,4 +24,22 @@
             {{ .Content }}
         </div>
     </section>
+
+    <section class="row">
+        <div class="col s12 m10 offset-m1 l10 offset-l1">
+            {{ $prev := partial "prev-in-section" . }}
+            {{ $next := partial "next-in-section" . }}
+            {{ with $prev }}
+                <a href="{{ .Permalink }}">&lt; {{ .Title }}</a>
+            {{ end }}
+          
+            {{ if and $prev $next}}
+              &nbsp; | &nbsp;
+            {{ end }}
+
+            {{ with $next }}
+                <a href="{{ .Permalink }}">{{ .Title }} &gt;</a>
+            {{ end }}
+        </div>
+    </section>
 </article>
