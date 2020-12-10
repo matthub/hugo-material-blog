@@ -1,0 +1,15 @@
+{{ $firstSection := .Section }}
+{{ $permalink := .Permalink }}
+{{ $iter := 0 }}
+{{ $prev := 0 }}
+{{ range where .Site.RegularPages.Reverse "Section" $firstSection }}
+  {{ $current := . }}
+  {{ with $iter }}
+    {{ if and (eq $current.Permalink $permalink) }}
+      {{ $prev = $iter }}
+    {{ end }}
+  {{ end }}
+  {{ $iter = . }}
+{{ end }}
+
+{{ return $prev }}
