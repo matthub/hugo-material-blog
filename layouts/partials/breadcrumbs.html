@@ -4,14 +4,16 @@
 </ol>
 {{ define "breadcrumbnav" }}
 {{ if and .p1.Parent }}
-{{   if not .p1.Parent.IsHome }}
-{{     template "breadcrumbnav" (dict "p1" .p1.Parent "p2" .p2 )  }}
-{{   end }}
+{{   template "breadcrumbnav" (dict "p1" .p1.Parent "p2" .p2 )  }}
 {{ else if not .p1.IsHome }}
 {{   template "breadcrumbnav" (dict "p1" .p1.Site.Home "p2" .p2 )  }}
 {{ end }}
 <li{{ if eq .p1 .p2 }} class="active"{{ end }}>
   {{ $shortLink := index (last 1 (split (delimit (split .p1.RelPermalink "/") "," "") ",")) 0 }}
-  <a href="{{ .p1.Permalink }}">{{ default $shortLink .p1.Title }}</a>
+  {{ $title := default $shortLink .p1.Title }}
+  {{ if .p1.IsHome }}
+  {{  $title = "HOME" }}
+  {{ end }}
+  <a href="{{ .p1.Permalink }}">{{ $title }}</a>
 </li>
 {{ end }}

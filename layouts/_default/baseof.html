@@ -22,7 +22,8 @@
 
     {{ partial "head-custom.html" . }}
   </head>
-  <body>
+  {{ $bodyClass := default "normal" .Site.Params.defaultCssClass }}
+  <body class="{{ $bodyClass }}">
     {{ block "header" . }}
       {{ partial "header" . }}
     {{ end }}
