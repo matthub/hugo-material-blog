@@ -1,16 +1,34 @@
 {{ define "main" }}
 
 {{ $truncate := default true .Site.Params.truncate }}
-{{ range where .Paginator.Pages "Params.hidden" "ne" "true" }} 
+{{ if .IsHome }}
+    {{ $exclude := default (slice "page") .Site.Params.excludeOnHomepage }}
+    {{ $paginator := .Paginate (where (where .Site.RegularPages "Type" "not in" $exclude) "Params.hidden" "ne" "true") }}
+    {{ range $paginator.Pages }}
+        {{ if $truncate }}
+            {{ .Render "summary" }}
+        {{ else }}
+            {{ .Render "content" }}
+        {{ end }}
 
+        {{ partial "post-separator" }}
+
+    {{ end }}
+
+{{ else }}
+    {{ $paginator := .Paginate (where .Pages "Params.hidden" "ne" "true") }}
+    {{ range $paginator.Pages }}
     {{ if $truncate }}
         {{ .Render "summary" }}
     {{ else }}
         {{ .Render "content" }}
     {{ end }}
 
-    {{ partial "post-separator" }}
+    {{ if not .Parent.IsHome }}
+        {{ partial "post-separator" }}
+    {{ end }}
 
+    {{ end }}
 {{ end }}
 
 {{ partial "paginator" . }}
